@@ -589,6 +589,10 @@ public class DoraemonKit {
         mSystemDokitViewIcon = true;
     }
 
+    public static void show(Activity activity) {
+        show();
+    }
+
     public static void hide() {
         DokitViewManager.getInstance().detach(FloatIconDokitView.class.getSimpleName());
 
