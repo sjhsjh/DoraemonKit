@@ -15,6 +15,14 @@ public class LogcatHelper {
     public static final String BUFFER_EVENTS = "events";
     public static final String BUFFER_RADIO = "radio";
 
+    public static Process execClearProcess() throws IOException {
+        List<String> args = new ArrayList<>(Arrays.asList("logcat", "-c"));
+        Process process = RuntimeHelper.exec(args);
+        if (process != null) {
+            RuntimeHelper.destroy(process);
+        }
+        return null;
+    }
 
     public static Process getLogcatProcess(String buffer) throws IOException {
 

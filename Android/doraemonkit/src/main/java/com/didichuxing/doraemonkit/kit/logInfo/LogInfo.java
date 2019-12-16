@@ -42,7 +42,7 @@ public class LogInfo implements IKit {
 
     @Override
     public void onAppInit(Context context) {
-        LogInfoConfig.setLogInfoOpen(context, false);
+        // LogInfoConfig.setLogInfoOpen(context, false);
     }
 
 }

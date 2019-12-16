@@ -244,9 +244,9 @@ class NormalDokitViewManager implements DokitViewManagerInterface {
                     if (dokitViews == null || dokitViews.size() == 0) {
                         return false;
                     }
-                    for (AbsDokitView dokitView : dokitViews.values()) {
-                        if (dokitView.shouldDealBackKey()) {
-                            return dokitView.onBackPressed();
+                    for (AbsDokitView dokitView : dokitViews.values()) {    // edit bt sjh
+                        if (dokitView.shouldDealBackKey() && dokitView.onBackPressed()) {
+                            return true;
                         }
                     }
                     return false;

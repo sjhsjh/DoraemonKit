@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.didichuxing.doraemonkit.config.LogInfoConfig;
 import com.didichuxing.doraemonkit.config.PerformanceSpInfoConfig;
 import com.didichuxing.doraemonkit.constant.SharedPrefsKey;
 import com.didichuxing.doraemonkit.kit.Category;
@@ -32,6 +33,7 @@ import com.didichuxing.doraemonkit.kit.gpsmock.ServiceHookManager;
 import com.didichuxing.doraemonkit.kit.largepicture.LargePictureKit;
 import com.didichuxing.doraemonkit.kit.layoutborder.LayoutBorder;
 import com.didichuxing.doraemonkit.kit.logInfo.LogInfo;
+import com.didichuxing.doraemonkit.kit.logInfo.LogInfoDokitView;
 import com.didichuxing.doraemonkit.kit.methodtrace.MethodCostKit;
 import com.didichuxing.doraemonkit.kit.mode.FloatModeKit;
 import com.didichuxing.doraemonkit.kit.network.NetworkKit;
@@ -151,7 +153,7 @@ public class DoraemonKit {
         sHasInit = true;
         //赋值
         APPLICATION = app;
-        String StrfloatMode = SharedPrefsUtil.getString(app, SharedPrefsKey.FLOAT_START_MODE, "normal");
+        String StrfloatMode = SharedPrefsUtil.getString(app, SharedPrefsKey.FLOAT_START_MODE, "system");
         if (StrfloatMode.equals("normal")) {
             IS_NORMAL_FLOAT_MODE = true;
         } else {
@@ -495,6 +497,17 @@ public class DoraemonKit {
         Map<String, AbsDokitView> dokitViewMap = DokitViewManager.getInstance().getDokitViews(activity);
         for (AbsDokitView absDokitView : dokitViewMap.values()) {
             absDokitView.onResume();
+        }
+
+        // edit bt sjh  根据日志开关在应用启动就添加日志view
+        if (LogInfoConfig.isLogInfoOpen(activity)) {
+            if (!dokitViewMap.containsKey("LogInfoDokitView")) {
+                DokitIntent intent = new DokitIntent(LogInfoDokitView.class);
+                intent.mode = DokitIntent.MODE_SINGLE_INSTANCE;
+                DokitViewManager.getInstance().attach(intent);
+            }
+        } else {
+            DokitViewManager.getInstance().detach(LogInfoDokitView.class);
         }
     }
 

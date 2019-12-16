@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -195,11 +196,13 @@ public class LogItemAdapter extends AbsRecyclerAdapter<AbsViewBinder<LogLine>, L
         @Override
         protected FilterResults performFiltering(CharSequence prefix) {
             FilterResults results = new FilterResults();
-
-
+            // edit bt sjh
+            ArrayList<LogLine> originalValuesBeforeFilter = new ArrayList<LogLine>(mOriginalValues);
             ArrayList<LogLine> allValues = performFilteringOnList(mOriginalValues, prefix);
 
-            results.values = allValues;
+            // edit bt sjh.
+            // results.values = allValues;
+            results.values = new Pair<>(originalValuesBeforeFilter, allValues);
             results.count = allValues.size();
 
             return results;
@@ -251,13 +254,41 @@ public class LogItemAdapter extends AbsRecyclerAdapter<AbsViewBinder<LogLine>, L
 
             //log.d("filtering: %s", constraint);
 
+            // mList = (List<LogLine>) results.values;
+            mList = (List<LogLine>)(((Pair)(results.values)).second);
 
-            mList = (List<LogLine>) results.values;
+            // edit bt sjh. 修复“读取新日志并更新数据”之后异步过滤的结果才回调的bug。该处过滤完毕后将新读取的数据筛选一下再更新到数据中。
+            ArrayList<LogLine> originalValuesBeforeFilter =
+                    (ArrayList<LogLine>) (((Pair) (results.values)).first);
+            ArrayList<LogLine> detaList = new ArrayList<LogLine>(mOriginalValues);
+            if (detaList.size() != originalValuesBeforeFilter.size()) {
+                detaList.removeAll(originalValuesBeforeFilter);
+
+                List<LogLine> filteredObjects = mFilter.performFilteringOnList(detaList, constraint);
+                mList.addAll(filteredObjects);
+            }
+
             if (results.count > 0) {
                 notifyDataSetChanged();
             } else {
                 notifyDataSetChanged();
             }
+
+            if (mFilterCallback != null) {
+                mFilterCallback.afterFilter();
+            }
         }
+    }
+
+    public FilterCallback mFilterCallback;
+
+    public interface FilterCallback {
+        void afterFilter();
+    }
+
+    public void clearData() {
+        mOriginalValues.clear();
+        mList.clear();
+        notifyDataSetChanged();
     }
 }

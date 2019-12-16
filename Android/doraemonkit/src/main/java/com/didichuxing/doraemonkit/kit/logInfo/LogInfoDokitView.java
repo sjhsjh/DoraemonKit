@@ -1,5 +1,6 @@
 package com.didichuxing.doraemonkit.kit.logInfo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
+import android.widget.Button;
+import com.blankj.utilcode.util.ActivityUtils;
+import com.didichuxing.doraemonkit.kit.logInfo.helper.LogcatHelper;
+import java.io.IOException;
 import com.didichuxing.doraemonkit.R;
 import com.didichuxing.doraemonkit.ui.UniversalActivity;
 import com.didichuxing.doraemonkit.ui.base.AbsDokitView;
@@ -41,6 +45,9 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
 
     private TextView mLogHint;
     private View mLogPage;
+    private Button mBtnClear;
+    private Button mBtnHttpLog;
+    private Button mBtnEntCore;
 
     private boolean mIsLoaded;
 
@@ -59,7 +66,7 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
 
     @Override
     public View onCreateView(Context context, FrameLayout view) {
-        return LayoutInflater.from(context).inflate(R.layout.dk_float_log_info, null);
+        return LayoutInflater.from(context).inflate(R.layout.dk_float_log_info_dk, null);
     }
 
     @Override
@@ -68,6 +75,9 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
     }
 
     public void initView() {
+        mBtnClear = findViewById(R.id.clear);
+        mBtnHttpLog = findViewById(R.id.httpLog);
+        mBtnEntCore = findViewById(R.id.entCore);
         mLogHint = findViewById(R.id.log_hint);
         mLogPage = findViewById(R.id.log_page);
         mLogList = findViewById(R.id.log_list);
@@ -103,6 +113,13 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
 
             }
         });
+        mLogItemAdapter.mFilterCallback = new LogItemAdapter.FilterCallback() {
+            @Override
+            public void afterFilter() {
+                mTitleBar.setTitle("日志查看 当前共" + mLogItemAdapter.getItemCount() + "行");
+            }
+        };
+
         mLogHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,8 +132,10 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.verbose) {
                     mLogItemAdapter.setLogLevelLimit(Log.VERBOSE);
+                    Log.w("sjh", "======VERBOSE======");
                 } else if (checkedId == R.id.debug) {
                     mLogItemAdapter.setLogLevelLimit(Log.DEBUG);
+                    Log.w("sjh", "=======DEBUG=====");
                 } else if (checkedId == R.id.info) {
                     mLogItemAdapter.setLogLevelLimit(Log.INFO);
                 } else if (checkedId == R.id.warn) {
@@ -145,6 +164,31 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
         });
 
         mRadioGroup.check(R.id.verbose);
+        mBtnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    LogcatHelper.execClearProcess();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mLogItemAdapter.clearData();
+            }
+        });
+        mBtnHttpLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLogFilter.setText("http-log");
+                mLogFilter.setSelection(mLogFilter.getText().length());
+            }
+        });
+        mBtnEntCore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLogFilter.setText("EntCore");
+                mLogFilter.setSelection(mLogFilter.getText().length());
+            }
+        });
     }
 
 
@@ -178,8 +222,14 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
             mLogItemAdapter.notifyDataSetChanged();
         }
         if (logLines.size() > 0) {
-            LogLine line = logLines.get(logLines.size() - 1);
-            mLogHint.setText(line.getTag() + ":" + line.getLogOutput());
+            // edit bt sjh
+            if (mLogItemAdapter.getItemCount() > 0) {
+                LogLine lastLine = mLogItemAdapter.getData().get(mLogItemAdapter.getItemCount() - 1);
+                mLogHint.setText(lastLine.getTag() + ":" + lastLine.getLogOutput());
+            } else {    // origin
+                LogLine line = logLines.get(logLines.size() - 1);
+                mLogHint.setText(line.getTag() + ":" + line.getLogOutput());
+            }
         }
         if (++counter % UPDATE_CHECK_INTERVAL == 0
                 && mLogItemAdapter.getTrueValues().size() > MAX_LOG_LINE_NUM) {
@@ -190,6 +240,8 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
         if (mAutoscrollToBottom) {
             scrollToBottom();
         }
+        // edit bt sjh
+        mTitleBar.setTitle("日志查看 当前共" + mLogItemAdapter.getItemCount() + "行");
     }
 
     private void scrollToBottom() {
@@ -272,6 +324,13 @@ public class LogInfoDokitView extends AbsDokitView implements LogInfoManager.OnL
         super.onResume();
         if (getActivity() != null && !getActivity().getClass().getSimpleName().equals(UniversalActivity.class.getSimpleName())) {
             minimize();
+        }
+        // edit bt sjh。系统window模式下getActivity()固定为null;
+        if (getActivity() == null) {
+            Activity activity = ActivityUtils.getTopActivity();
+            if (activity != null && !activity.getClass().getSimpleName().equals(UniversalActivity.class.getSimpleName())) {
+                minimize();
+            }
         }
     }
 

@@ -455,14 +455,17 @@ public abstract class AbsDokitView implements DokitView, TouchProxy.OnTouchEvent
         if (isNormalMode()) {
             if (mRootView != null) {
                 if (mLastDokitViewPosInfo.getDokitViewWidth() == 0) {
-                    mDokitViewWidth = mRootView.getWidth();
+                    // edit bt sjh
+                    // mDokitViewWidth = mRootView.getWidth();  // 界面可见之前不会绘制，获取结果为0
+                    mDokitViewWidth = mRootView.getLayoutParams().width;
                     mLastDokitViewPosInfo.setDokitViewWidth(mDokitViewWidth);
                 } else {
                     mDokitViewWidth = mLastDokitViewPosInfo.getDokitViewWidth();
                 }
 
                 if (mLastDokitViewPosInfo.getDokitViewHeight() == 0) {
-                    mDokitViewHeight = mRootView.getHeight();
+                    // mDokitViewHeight = mRootView.getHeight();
+                    mDokitViewHeight = mRootView.getLayoutParams().height;
                     mLastDokitViewPosInfo.setDokitViewHeight(mDokitViewHeight);
                 } else {
                     mDokitViewHeight = mLastDokitViewPosInfo.getDokitViewHeight();

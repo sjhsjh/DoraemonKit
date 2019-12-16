@@ -70,39 +70,40 @@ public class PerformanceCloseDokitView extends AbsDokitView {
         mIvClose3 = findViewById(R.id.iv_close3);
         mWrap3.setVisibility(View.GONE);
 
-        mWrap0.setOnClickListener(new View.OnClickListener() {
+        // edit bt sjh
+        mIvClose0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setVisibility(View.GONE);
+                mWrap0.setVisibility(View.GONE);
                 if (mPerformanceCloseListener != null) {
-                    mPerformanceCloseListener.onClose((Integer) v.getTag());
+                    mPerformanceCloseListener.onClose((Integer) mWrap0.getTag());
                 }
             }
         });
-        mWrap1.setOnClickListener(new View.OnClickListener() {
+        mIvClose1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setVisibility(View.GONE);
+                mWrap1.setVisibility(View.GONE);
                 if (mPerformanceCloseListener != null) {
-                    mPerformanceCloseListener.onClose((Integer) v.getTag());
+                    mPerformanceCloseListener.onClose((Integer) mWrap1.getTag());
                 }
             }
         });
-        mWrap2.setOnClickListener(new View.OnClickListener() {
+        mIvClose2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setVisibility(View.GONE);
+                mWrap2.setVisibility(View.GONE);
                 if (mPerformanceCloseListener != null) {
-                    mPerformanceCloseListener.onClose((Integer) v.getTag());
+                    mPerformanceCloseListener.onClose((Integer) mWrap2.getTag());
                 }
             }
         });
-        mWrap3.setOnClickListener(new View.OnClickListener() {
+        mIvClose3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setVisibility(View.GONE);
+                mWrap3.setVisibility(View.GONE);
                 if (mPerformanceCloseListener != null) {
-                    mPerformanceCloseListener.onClose((Integer) v.getTag());
+                    mPerformanceCloseListener.onClose((Integer) mWrap3.getTag());
                 }
             }
         });

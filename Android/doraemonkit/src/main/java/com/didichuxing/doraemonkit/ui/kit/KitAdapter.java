@@ -58,7 +58,7 @@ public class KitAdapter extends AbsRecyclerAdapter<AbsViewBinder<KitItem>, KitIt
             super.onViewClick(view, data);
             //常规模式下点击常用工具不隐藏工具面板
             //if (data.kit.getCategory() != Category.TOOLS && DoraemonKit.IS_NORMAL_FLOAT_MODE) {
-            DokitViewManager.getInstance().detachToolPanel();
+            // DokitViewManager.getInstance().detachToolPanel();    // edit bt sjh
             //}
             data.kit.onClick(getContext());
         }

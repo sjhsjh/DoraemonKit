@@ -74,6 +74,8 @@ public class BaseFragment extends Fragment {
             e.printStackTrace();
         }
         DokitViewManager.getInstance().detach(FloatIconDokitView.class);
+        // edit bt sjh
+        DokitViewManager.getInstance().detachToolPanel();
     }
 
 
@@ -136,9 +138,10 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        DokitIntent intent = new DokitIntent(FloatIconDokitView.class);
-        intent.mode = DokitIntent.MODE_SINGLE_INSTANCE;
-        DokitViewManager.getInstance().attach(intent);
+        // edit bt sjh
+        // DokitIntent intent = new DokitIntent(FloatIconDokitView.class);
+        // intent.mode = DokitIntent.MODE_SINGLE_INSTANCE;
+        // DokitViewManager.getInstance().attach(intent);
     }
 
     public DialogProvider showDialog(DialogInfo dialogInfo) {

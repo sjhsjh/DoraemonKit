@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.didichuxing.doraemonkit.ui.main.FloatIconDokitView;
+import com.didichuxing.doraemonkit.ui.main.ToolPanelDokitView;
 import com.didichuxing.doraemonkit.util.LogHelper;
 
 import java.util.ArrayDeque;
@@ -66,5 +68,18 @@ public abstract class BaseActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    // edit bt sjh
+    @Override
+    public void finish() {
+        DokitIntent popViewIntent = new DokitIntent(ToolPanelDokitView.class);
+        popViewIntent.mode = DokitIntent.MODE_SINGLE_INSTANCE;
+        DokitViewManager.getInstance().attach(popViewIntent);
+
+        DokitIntent intent = new DokitIntent(FloatIconDokitView.class);
+        intent.mode = DokitIntent.MODE_SINGLE_INSTANCE;
+        DokitViewManager.getInstance().attach(intent);
+        super.finish();
     }
 }

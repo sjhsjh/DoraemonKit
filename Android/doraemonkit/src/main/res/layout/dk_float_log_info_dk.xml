@@ -35,6 +35,33 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除日志" />
+
+            <Button
+                android:id="@+id/httpLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="http-log" />
+
+            <Button
+                android:id="@+id/entCore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EntCore" />
+        </LinearLayout>
+
         <RadioGroup
             android:id="@+id/radio_group"
             android:layout_width="wrap_content"
