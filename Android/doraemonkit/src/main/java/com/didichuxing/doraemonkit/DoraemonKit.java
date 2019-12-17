@@ -607,7 +607,11 @@ public class DoraemonKit {
     }
 
     public static boolean isShow() {
-        return mSystemDokitViewIcon;
+        if (IS_NORMAL_FLOAT_MODE) {
+            return mSystemDokitViewIcon;
+        } else {
+            return PermissionUtil.canDrawOverlays(APPLICATION) && mSystemDokitViewIcon;
+        }
     }
 
     public static Activity getCurrentResumedActivity() {
