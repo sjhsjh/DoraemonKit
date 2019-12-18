@@ -176,7 +176,7 @@ public class GroupKitAdapter extends AbsRecyclerAdapter<AbsViewBinder<List<KitIt
                 }
             });
 
-            String floatMode = SharedPrefsUtil.getString(mContext, SharedPrefsKey.FLOAT_START_MODE, "normal");
+            String floatMode = SharedPrefsUtil.getString(mContext, SharedPrefsKey.FLOAT_START_MODE, "system");
             if (floatMode.equals("normal")) {
                 rbNormal.setChecked(true);
             } else {
